@@ -1,0 +1,24 @@
+# This is a partial manifest showing static node group configuration.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: cluster-autoscaler
+          image: registry.k8s.io/autoscaling/cluster-autoscaler:v1.31.0 # Use a specific version
+          command:
+            - ./cluster-autoscaler
+            - --v=4
+            - --stderrthreshold=info
+            - --cloud-provider=aws # Or gce, azure, etc.
+            - --skip-nodes-with-local-storage=false
+            - --expander=least-waste
+            # This line statically defines the node group and its boundaries.
+            - --nodes=2:10:my-compute-intensive-asg-name
+            - --balance-similar-node-groups
+            - --skip-nodes-with-system-pods=false
+          # The --nodes flag format is: <min-nodes>:<max-nodes>:<asg-name>
