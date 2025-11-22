@@ -3,6 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-app
+  labels:
+    app.kubernetes.io/name: interview-app
+    app.kubernetes.io/version: v5
+    app.kubernetes.io/component: frontend
 spec:
   replicas: 9
   selector:
@@ -16,16 +20,54 @@ spec:
         app: interview-app
         layer: frontend
         version: stable
+        app.kubernetes.io/name: interview-app
+        app.kubernetes.io/version: v5
     spec:
       containers:
       - name: interview-app
-        image: interview:v5
+        image: interview:v5  # Replace with your actual image
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 80
+            name: http
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
 ---
 # Deployment for the canary version
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-app-canary
+  labels:
+    app.kubernetes.io/name: interview-app
+    app.kubernetes.io/version: v6
+    app.kubernetes.io/component: frontend
 spec:
   replicas: 1
   selector:
@@ -39,7 +81,41 @@ spec:
         app: interview-app
         layer: frontend
         version: canary
+        app.kubernetes.io/name: interview-app
+        app.kubernetes.io/version: v6
     spec:
       containers:
       - name: interview-app
-        image: interview:v6
+        image: interview:v6  # Replace with your actual image
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 80
+            name: http
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          allowPrivilegeEscalation: false
+          seccompProfile:
+            type: RuntimeDefault
+          capabilities:
+            drop:
+            - ALL
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
