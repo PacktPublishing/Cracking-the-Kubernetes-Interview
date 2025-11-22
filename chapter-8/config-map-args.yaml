@@ -15,9 +15,26 @@ metadata:
 spec:
   containers:
     - name: sample
-      image: busybox
+      image: busybox:1.36  # Pin version for reproducibility
+      imagePullPolicy: IfNotPresent
       command: [ "/bin/sh", "-c", "echo $(TEST_VAR)" ]
       envFrom:
       - configMapRef:
           name: args-sample
-  restartPolicy: Never
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        allowPrivilegeEscalation: false
+        seccompProfile:
+          type: RuntimeDefault
+        capabilities:
+          drop:
+          - ALL
+  restartPolicy: Never  # For demo purposes - pod runs once and exits
