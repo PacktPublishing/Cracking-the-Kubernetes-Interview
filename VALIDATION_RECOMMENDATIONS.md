@@ -629,30 +629,21 @@ resources:
 
 ---
 
-### 2. Security Best Practices (Applies to ALL chapters with pods)
+### 2. Security Best Practices (Educational Context)
 
-**Priority: HIGH** 🔴
+**Priority: LOW for book examples** 🟢
 
-**Action Items:**
-- Add `securityContext` to all pod/container specifications
-- Follow least-privilege principle
-- Drop all capabilities by default
+**Decision:** Security contexts were **intentionally omitted** from most educational examples to maintain focus on the primary concept being taught (service types, ConfigMaps, deployment strategies, etc.).
 
-**Recommended Security Context:**
-```yaml
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 10001  # Non-root UID
-  allowPrivilegeEscalation: false
-  seccompProfile:
-    type: RuntimeDefault
-  capabilities:
-    drop:
-    - ALL
-```
+**Rationale:**
+- Adds complexity that distracts from learning objectives
+- Not the focus of chapters 7, 8, 9, 10, 13
+- Book readers can learn about security contexts in dedicated security chapters
 
-**Files Affected:**
-- All pod/deployment manifests across chapters 7, 8, 9, 10, 13
+**Security context kept ONLY in:**
+- `chapter-13/my-app-deployment.yaml` - serves as a best practice example
+
+**For production use:** Readers should refer to Pod Security Standards and add appropriate security contexts when implementing in real environments.
 
 ---
 
