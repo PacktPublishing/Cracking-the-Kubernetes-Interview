@@ -9,7 +9,8 @@ metadata:
 spec:
   containers:
     - name: ubuntu
-      image: ubuntu
+      image: ubuntu:22.04  # Pin version for reproducibility
+      imagePullPolicy: IfNotPresent
       args:
         - "bash"
         - "-c"
@@ -23,6 +24,13 @@ spec:
       volumeMounts:
         - name: labels
           mountPath: /etc/pod
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
   volumes:
     - name: labels
       # Exposing via api mount

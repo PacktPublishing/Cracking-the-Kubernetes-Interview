@@ -3,6 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-blue
+  labels:
+    app.kubernetes.io/name: my-app
+    app.kubernetes.io/version: blue
+    app.kubernetes.io/component: backend
 spec:
   replicas: 3
   selector:
@@ -14,18 +18,45 @@ spec:
       labels:
         app: my-app
         version: blue
+        app.kubernetes.io/name: my-app
+        app.kubernetes.io/version: blue
     spec:
       containers:
       - name: my-app
-        image: my-app:blue
+        image: my-app:blue  # Replace with your actual image (e.g., myregistry.io/myapp:v1.0.0)
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
 ---
 # Green Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-green
+  labels:
+    app.kubernetes.io/name: my-app
+    app.kubernetes.io/version: green
+    app.kubernetes.io/component: backend
 spec:
   replicas: 3
   selector:
@@ -37,9 +68,32 @@ spec:
       labels:
         app: my-app
         version: green
+        app.kubernetes.io/name: my-app
+        app.kubernetes.io/version: green
     spec:
       containers:
       - name: my-app
-        image: my-app:green
+        image: my-app:green  # Replace with your actual image (e.g., myregistry.io/myapp:v2.0.0)
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
+          name: http
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 80
+          initialDelaySeconds: 15
+          periodSeconds: 10
