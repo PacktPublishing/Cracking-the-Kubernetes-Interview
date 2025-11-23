@@ -28,13 +28,4 @@ spec:
         limits:
           cpu: "100m"
           memory: "128Mi"
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        allowPrivilegeEscalation: false
-        seccompProfile:
-          type: RuntimeDefault
-        capabilities:
-          drop:
-          - ALL
   restartPolicy: Never  # For demo purposes - pod runs once and exits

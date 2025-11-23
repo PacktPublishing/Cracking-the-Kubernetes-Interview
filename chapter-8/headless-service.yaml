@@ -28,15 +28,6 @@ spec:
           limits:
             cpu: "500m"
             memory: "1Gi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 999  # rabbitmq user
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
         livenessProbe:
           exec:
             command:

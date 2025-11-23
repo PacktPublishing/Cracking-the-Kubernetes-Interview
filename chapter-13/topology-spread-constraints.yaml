@@ -41,17 +41,6 @@ spec:
           limits:
             cpu: "200m"
             memory: "256Mi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 101  # nginx user
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
-            add:
-            - NET_BIND_SERVICE  # Required for nginx to bind to port 80
         livenessProbe:
           httpGet:
             path: /

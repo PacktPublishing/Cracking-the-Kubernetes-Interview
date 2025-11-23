@@ -28,15 +28,6 @@ spec:
           limits:
             cpu: "200m"
             memory: "256Mi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
         livenessProbe:
           httpGet:
             path: /

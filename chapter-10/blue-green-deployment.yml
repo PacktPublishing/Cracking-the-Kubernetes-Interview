@@ -35,15 +35,6 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
         readinessProbe:
           httpGet:
             path: /healthz
@@ -94,15 +85,6 @@ spec:
           limits:
             cpu: "500m"
             memory: "512Mi"
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
-          seccompProfile:
-            type: RuntimeDefault
-          capabilities:
-            drop:
-            - ALL
         readinessProbe:
           httpGet:
             path: /healthz

@@ -39,15 +39,6 @@ spec:
             limits:
               cpu: "100m"
               memory: "128Mi"
-          securityContext:
-            runAsNonRoot: true
-            runAsUser: 1000
-            allowPrivilegeEscalation: false
-            seccompProfile:
-              type: RuntimeDefault
-            capabilities:
-              drop:
-              - ALL
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
