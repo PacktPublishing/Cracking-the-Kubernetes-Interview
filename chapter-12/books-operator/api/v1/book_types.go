@@ -8,8 +8,17 @@ import (
 
 // BookSpec defines the desired state of Book
 type BookSpec struct {
-    Book string `json:"book,omitempty"`
-    Year int    `json:"year,omitempty"`
+    // Book title (required, non-empty string)
+    // +kubebuilder:validation:Required
+    // +kubebuilder:validation:MinLength=1
+    // +kubebuilder:validation:MaxLength=200
+    Book string `json:"book"`
+
+    // Publication year (required, between 1900-2100)
+    // +kubebuilder:validation:Required
+    // +kubebuilder:validation:Minimum=1900
+    // +kubebuilder:validation:Maximum=2100
+    Year int `json:"year"`
 }
 
 // BookStatus defines the observed state of Book

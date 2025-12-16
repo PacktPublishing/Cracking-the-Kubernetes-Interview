@@ -26,11 +26,19 @@ spec:
     spec:
       containers:
         - name: curl
-          image: curlimages/curl
+          image: curlimages/curl:8.5.0  # Pin version for reproducibility
+          imagePullPolicy: IfNotPresent
           command:
           - /bin/sh
           - -c
           - "set -e; while true; do curl --fail https://github.com -I -L --connect-timeout 5; sleep 5; done"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

@@ -22,16 +22,24 @@ spec:
     spec:
       containers:
       - name: http
-        image: mendhak/http-https-echo
+        image: mendhak/http-https-echo:33  # Pin version for reproducibility
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080
+            name: http
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
         livenessProbe:
           httpGet:
             path: /version
             port: 8080
           initialDelaySeconds: 3
           periodSeconds: 3
-        ports:
-          - containerPort: 8080
-            name: http
 ---
 apiVersion: v1
 kind: Service
@@ -69,11 +77,19 @@ spec:
     spec:
       containers:
         - name: curl
-          image: curlimages/curl
+          image: curlimages/curl:8.5.0  # Pin version for reproducibility
+          imagePullPolicy: IfNotPresent
           command:
           - /bin/sh
           - -c
           - "set -e; while true; do curl --fail http://test-http-server/test -I --connect-timeout 5 -X POST; sleep 1; done"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "100m"
+              memory: "128Mi"
 ---
 apiVersion: "cilium.io/v2"
 kind: CiliumNetworkPolicy

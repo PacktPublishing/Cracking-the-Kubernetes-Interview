@@ -18,14 +18,22 @@ metadata:
 spec:
   containers:
     - name: sample
-      image: busybox
+      image: busybox:1.36  # Pin version for reproducibility
+      imagePullPolicy: IfNotPresent
       command: [ "/bin/sh", "-c", "cat /data/test/*" ]
       volumeMounts:
       - name: volume-sample
         mountPath: /data/test
         readOnly: true
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
   volumes:
     - name: volume-sample
       configMap:
         name: volume-sample
-  restartPolicy: Never
+  restartPolicy: Never  # For demo purposes - pod runs once and exits
