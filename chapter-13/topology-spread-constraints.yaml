@@ -29,4 +29,27 @@ spec:
             app: my-app
       containers:
       - name: my-app-container
-        image: nginx
+        image: nginx:1.27.0  # Pin version for reproducibility
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 80
+            name: http
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
